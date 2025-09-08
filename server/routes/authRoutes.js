@@ -7,7 +7,7 @@ const router = express.Router()
 
 router.post('/signup', async (req, res) => {
     const {name, email, password} = req.body;
-    console.log(name);
+
     try {
         const db = await connectToDatabase()
         const [rows] = await db.query('SELECT * FROM users WHERE email = ?', [email])
@@ -73,3 +73,4 @@ router.get('/home', verifyToken, async (req, res) => {
 })
 
 export default router;
+
