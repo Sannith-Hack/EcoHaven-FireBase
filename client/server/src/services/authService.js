@@ -1,3 +1,4 @@
+// EcoHaven-FireBase/client/server/src/services/authService.js
 // services/userService.js
 import { pool } from "../config/db.js";
 import bcrypt from 'bcryptjs';
@@ -71,7 +72,7 @@ export const getUserFromToken = async (token) => {
         console.log("Decoded token:", decoded);
 
         // Retrieve user details from the database
-        const [rows] = await pool.query('SELECT id, name, email, mobile, userType FROM users WHERE id = ?', [decoded.id]);
+        const [rows] = await pool.query('SELECT id, name, email, mobile, userType, profile_picture, location, bio FROM users WHERE id = ?', [decoded.id]);
 
         if (rows.length === 0) {
             return { success: false, message: 'User not found' };
@@ -83,4 +84,18 @@ export const getUserFromToken = async (token) => {
         console.error("Token verification error:", error);
         return { success: false, message: 'Invalid or expired token' };
     }
+};
+
+// Update User Profile
+export const updateUserProfile = async (userId, userData) => {
+  try {
+    const { username, mobile, location, bio } = userData;
+    const query = `UPDATE users SET username = ?, mobile = ?, location = ?, bio = ? WHERE id = ?`;
+    const values = [username, mobile, location, bio, userId];
+    await pool.query(query, values);
+    return { success: true, message: 'Profile updated successfully' };
+  } catch (error) {
+    console.error("Profile update error:", error);
+    return { success: false, message: 'Failed to update profile. Please try again later.' };
+  }
 };

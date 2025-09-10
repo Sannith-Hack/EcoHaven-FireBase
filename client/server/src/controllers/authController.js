@@ -1,6 +1,6 @@
-// controllers/authController.js
+// EcoHaven-FireBase/client/server/src/controllers/authController.js
 import UserModel from '../models/userModel.js';
-import { registerUser, loginUser, getUserFromToken } from '../services/authService.js';
+import { registerUser, loginUser, getUserFromToken, updateUserProfile } from '../services/authService.js';
 
 export const register = async (req, res) => {
     const { username, email, mobile, password, userType } = req.body;
@@ -23,9 +23,9 @@ export const register = async (req, res) => {
         }
     } catch (error) {
         console.error('Error in user registration:', error);
-        return res.status(500).json({ 
-            success: false, 
-            message: 'Registration failed. Please try again later.' 
+        return res.status(500).json({
+            success: false,
+            message: 'Registration failed. Please try again later.'
         });
     }
 };
@@ -47,11 +47,11 @@ export const login = async (req, res) => {
         } else {
             return res.status(401).json(response); // Unauthorized
         }
-    } catch (error) {
+    } catch (error)  {
         console.error('Error in user login:', error);
-        return res.status(500).json({ 
-            success: false, 
-            message: 'Login failed. Please try again later.' 
+        return res.status(500).json({
+            success: false,
+            message: 'Login failed. Please try again later.'
         });
     }
 };
@@ -77,4 +77,38 @@ export const getUserDetails = async (req, res) => {
         console.error('Error fetching user details:', error);
         return res.status(500).json({ success: false, message: 'Failed to retrieve user details' });
     }
+};
+
+export const updateProfile = async (req, res) => {
+  const { username, mobile, location, bio } = req.body;
+  const token = req.headers.authorization?.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ success: false, message: 'Unauthorized' });
+  }
+
+  try {
+    const user = await getUserFromToken(token);
+
+    if (!user.success) {
+      return res.status(401).json({ success: false, message: user.message });
+    }
+
+    const userId = user.user.id;
+    const updatedUser = await updateUserProfile(userId, {
+      username,
+      mobile,
+      location,
+      bio
+    });
+
+    if (updatedUser.success) {
+      return res.status(200).json(updatedUser);
+    } else {
+      return res.status(400).json(updatedUser);
+    }
+  } catch (error) {
+    console.error('Error updating user profile:', error);
+    return res.status(500).json({ success: false, message: 'Failed to update profile. Please try again later.' });
+  }
 };

@@ -1,3 +1,4 @@
+// EcoHaven-FireBase/client/src/pages/Profile.tsx
 // Profile.tsx
 
 import { useState, useEffect } from "react";
@@ -38,9 +39,11 @@ const Profile = () => {
         setUserProfile({
           name: userData.username,
           email: userData.email,
+          phone: userData.mobile || "Phone not set",
           location: userData.location || "Location not set",
           joinDate: new Date(userData.join_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long' }),
           avatar: userData.profile_picture || "/placeholder.svg",
+          bio: userData.bio || "No bio set.",
           stats: {
             itemsSold: userData.ads_posted || 0,
             itemsBought: 0, // This data isn't in the provided table
@@ -110,10 +113,12 @@ const Profile = () => {
                     </div>
                   </div>
                 </div>
-                <Button variant="outline" size="sm">
-                  <Edit className="w-4 h-4 mr-2" />
-                  Edit Profile
-                </Button>
+                <Link to="/edit-profile">
+                  <Button variant="outline" size="sm">
+                    <Edit className="w-4 h-4 mr-2" />
+                    Edit Profile
+                  </Button>
+                </Link>
               </div>
             </CardHeader>
           </Card>
@@ -172,8 +177,17 @@ const Profile = () => {
                   <p className="text-foreground">{userProfile.email}</p>
                 </div>
                 <div>
+                  <label className="text-sm font-medium text-muted-foreground">Phone Number</label>
+                  <p className="text-foreground">{userProfile.phone}</p>
+                </div>
+                <div>
                   <label className="text-sm font-medium text-muted-foreground">Location</label>
                   <p className="text-foreground">{userProfile.location}</p>
+                </div>
+                <Separator />
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">Bio</label>
+                  <p className="text-foreground">{userProfile.bio}</p>
                 </div>
               </CardContent>
             </Card>
