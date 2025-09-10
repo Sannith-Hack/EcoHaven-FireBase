@@ -1,4 +1,6 @@
-import { useState } from "react";
+// Profile.tsx
+
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/enhanced-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -6,28 +8,70 @@ import { Separator } from "@/components/ui/separator";
 import { User, Mail, Phone, MapPin, Calendar, Package, Heart, Settings, Edit } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Profile = () => {
   const { isLoggedIn } = useAuth();
   
-  // Mock user data - in a real app this would come from API/context
-  const [userProfile] = useState({
-    name: "P.Sannith",
-    email: "sunnysunnit@gmai.com",
-    location: "Warangal ,Shivanagar",
-    joinDate: "Sep 2025",
-    avatar: "/placeholder.svg",
-    stats: {
-      itemsSold: 12,
-      itemsBought: 8,
-      favorites: 15,
-      rating: 4.8
-    }
-  });
+  // State to hold the fetched user data
+  const [userProfile, setUserProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // If not logged in, redirect will be handled by the routing
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          setError("No authentication token found.");
+          setLoading(false);
+          return;
+        }
+
+        const response = await axios.get('http://localhost:3000/auth/home', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        
+        const userData = response.data.user;
+        setUserProfile({
+          name: userData.username,
+          email: userData.email,
+          location: userData.location || "Location not set",
+          joinDate: new Date(userData.join_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long' }),
+          avatar: userData.profile_picture || "/placeholder.svg",
+          stats: {
+            itemsSold: userData.ads_posted || 0,
+            itemsBought: 0, // This data isn't in the provided table
+            favorites: 0, // This data isn't in the provided table
+            rating: userData.rating || 0
+          }
+        });
+      } catch (err) {
+        setError(err.response?.data?.message || "Failed to fetch user data.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (isLoggedIn) {
+      fetchUserProfile();
+    }
+
+  }, [isLoggedIn]);
+
+  // If not logged in or loading, handle the UI accordingly
   if (!isLoggedIn) {
-    return null;
+    return null; // Redirect is handled by the router
+  }
+  
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center">Loading profile...</div>;
+  }
+
+  if (error) {
+    return <div className="min-h-screen flex items-center justify-center text-red-500">Error: {error}</div>;
   }
 
   return (
@@ -42,6 +86,7 @@ const Profile = () => {
                   <div className="w-24 h-24 bg-eco-light rounded-full flex items-center justify-center">
                     <User className="w-12 h-12 text-eco-green" />
                   </div>
+                  {/* Verified badge - you can link this to userData.is_verified */}
                   <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-eco-green rounded-full flex items-center justify-center">
                     <span className="text-white text-xs font-bold">✓</span>
                   </div>

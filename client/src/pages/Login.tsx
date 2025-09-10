@@ -22,7 +22,9 @@ const Login = () => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+// Login.tsx
+
+const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
@@ -31,6 +33,7 @@ const Login = () => {
 
       if (response.status === 201) {
         localStorage.setItem("token", response.data.token);
+        localStorage.setItem("userId", response.data.userId); // Store the userId
         login(); // update auth state
         toast({
           title: "Login Successful!",
