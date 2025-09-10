@@ -63,7 +63,25 @@ const Profile = () => {
 
   // If not logged in or loading, handle the UI accordingly
   if (!isLoggedIn) {
-    return null; // Redirect is handled by the router
+     return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-eco-sage/20 p-4">
+        <Card className="max-w-md w-full text-center shadow-lg border-eco-green/20">
+          <CardHeader>
+            <CardTitle className="text-2xl font-bold text-eco-forest">You are in Guest Mode</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-muted-foreground">
+              You are currently browsing as a guest. To view your profile and manage your listings, please sign in.
+            </p>
+            <Link to="/login">
+              <Button variant="eco" className="w-full">
+                Sign In
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
   
   if (loading) {
