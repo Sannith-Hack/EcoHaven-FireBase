@@ -39,7 +39,7 @@ const Profile = () => {
         setUserProfile({
           name: userData.username,
           email: userData.email,
-          phone: userData.mobile || "Phone not set",
+          phone: userData.phone || "Phone not set",
           location: userData.location || "Location not set",
           joinDate: new Date(userData.join_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long' }),
           avatar: userData.profile_picture || "/placeholder.svg",
