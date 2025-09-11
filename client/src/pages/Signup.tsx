@@ -99,6 +99,8 @@ const Signup = () => {
                     value={formData.email}
                     onChange={handleChange}
                     className="pl-10"
+                    pattern="^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$"
+  title="Please enter a valid email (e.g. name@example.com)"
                     required
                   />
                 </div>
@@ -115,6 +117,8 @@ const Signup = () => {
                     onChange={handleChange}
                     className="pl-10"
                     required
+                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+  title="Password must be at least 8 characters long, with uppercase, lowercase, number, and special character."
                   />
                 </div>
               </div>
