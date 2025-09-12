@@ -70,16 +70,31 @@ router.put('/update-profile', verifyToken, async (req, res) => {
 
     try {
         const db = await connectToDatabase();
+
+        // Check if phone already exists for another user
+        if (phone) {
+            const [rows] = await db.query(
+                'SELECT id FROM users WHERE phone = ? AND id != ?',
+                [phone, userId]
+            );
+            if (rows.length > 0) {
+                return res.status(409).json({ message: "Phone number already in use" });
+            }
+        }
+
+        // Update user profile
         await db.query(
             'UPDATE users SET username = ?, phone = ?, location = ?, bio = ? WHERE id = ?',
             [username, phone, location, bio, userId]
         );
+
         return res.status(200).json({ message: "Profile updated successfully" });
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: "An error occurred while updating the profile" });
     }
 });
+
 
 router.get('/home', verifyToken, async (req, res) => {
     try {
