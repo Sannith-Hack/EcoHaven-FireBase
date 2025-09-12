@@ -23,7 +23,8 @@ const userTableQuery = `CREATE TABLE IF NOT EXISTS apk.users (
     rating DECIMAL(2,1) DEFAULT 0.0,
     ads_posted INT DEFAULT 0,
     itemsBought INT DEFAULT 0,
-    favorites INT DEFAULT 0
+    favorites INT DEFAULT 0,
+    bio VARCHAR(255)
 );`;
 
 const postTableQuery = `CREATE TABLE IF NOT EXISTS posts (

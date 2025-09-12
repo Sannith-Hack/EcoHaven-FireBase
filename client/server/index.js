@@ -6,7 +6,7 @@ import createAllTable from './lib/dbUtils.js';
 const app = express()
 app.use(cors({
     origin: "*",
-    methods: ["GET", "POST"]
+    methods: ["GET", "POST", "PUT"]
 }))
 app.use(express.json())
 app.use('/auth', authRouter) 

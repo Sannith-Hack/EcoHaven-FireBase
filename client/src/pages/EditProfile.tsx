@@ -82,9 +82,9 @@ const EditProfile = () => {
 
       await axios.put("http://localhost:3000/auth/update-profile", {
         username: formData.username,
-        mobile: formData.phone,
+        phone: formData.phone,
         location: formData.location,
-        bio: formData.bio
+        bio: formData.bio,
       }, {
         headers: {
           'Authorization': `Bearer ${token}`
