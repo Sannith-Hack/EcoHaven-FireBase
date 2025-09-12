@@ -8,7 +8,7 @@ const pool=mysql2.createPool({
         database: process.env.DB_NAME,
 });
 
-const userTableQuery = `CREATE TABLE apk.users (
+const userTableQuery = `CREATE TABLE IF NOT EXISTS apk.users (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,

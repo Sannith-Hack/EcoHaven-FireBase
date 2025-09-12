@@ -56,10 +56,9 @@ const Signup = () => {
   }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!emailRegex.test(formData.email)) {
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  if (!emailRegex.test(formData.email)) {
     toast({
       title: "Invalid Email",
       description: "Please enter a valid email (e.g. user@example.com).",
@@ -87,25 +86,28 @@ const Signup = () => {
       });
       return;
     }
-    try {
-       const response = await axios.post('http://localhost:3000/auth/signup',formData)
-        console.log(response)
-    } catch (err) {
-      console.log(err)
-    }
-   
-    setIsLoading(true);
+  setIsLoading(true);  // move this to the top
 
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-      toast({
-        title: "Account Created!",
-        description: "Welcome to EcoHaven. Please sign in.",
-      });
-      navigate("/login");
-    }, 1000);
-  };
+  try {
+    const response = await axios.post('http://localhost:3000/auth/signup', formData);
+    console.log(response);
+
+    toast({
+      title: "Account Created!",
+      description: "Welcome to EcoHaven. Please sign in.",
+    });
+    navigate("/login");
+  } catch (err) {
+    console.error(err);
+    toast({
+      title: "Signup Failed",
+      description: "Something went wrong. Try again.",
+      variant: "destructive",
+    });
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-earth-beige to-eco-green-light">

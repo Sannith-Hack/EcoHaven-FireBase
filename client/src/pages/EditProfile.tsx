@@ -42,7 +42,7 @@ const EditProfile = () => {
         setFormData({
           username: userData.username || "",
           email: userData.email || "",
-          phone: userData.mobile || "",
+          phone: userData.phone || "",
           location: userData.location || "",
           bio: userData.bio || "",
           profileImage: userData.profile_picture || "/placeholder.svg"

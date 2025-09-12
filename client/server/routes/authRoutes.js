@@ -64,6 +64,29 @@ const verifyToken = async (req, res, next) => {
     }
 }
 
+router.post('/edit-profile', async (req, res) => {
+    const {username, phone, location,bio} = req.body;
+    console.log(username);
+    console.log(phone);
+    console.log(location);
+    console.log(bio);
+
+    // try {
+    //     const db = await connectToDatabase()
+    //     const [rows] = await db.query('SELECT * FROM users WHERE email = ?', [email])
+    //     if(rows.length > 0) {
+    //         return res.status(409).json({message : "user already existed"})
+    //     }
+    //     const hashPassword = await bcrypt.hash(password, 10)
+    //     await db.query("INSERT INTO users (username, email, password_hash ) VALUES (?, ?, ?)", 
+    //         [name, email,hashPassword])
+        
+    //     return res.status(201).json({message: "user created successfully"})
+    // } catch(err) {
+    //     return res.status(500).json(err.message)
+    // }
+})
+
 router.get('/home', verifyToken, async (req, res) => {
     try {
         const db = await connectToDatabase()
