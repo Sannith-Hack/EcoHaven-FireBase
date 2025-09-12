@@ -65,14 +65,14 @@ const verifyToken = async (req, res, next) => {
 }
 
 router.put('/update-profile', verifyToken, async (req, res) => {
-    const { username, mobile, location, bio } = req.body;
+    const { username, phone, location, bio } = req.body;
     const userId = req.userId;
 
     try {
         const db = await connectToDatabase();
         await db.query(
             'UPDATE users SET username = ?, phone = ?, location = ?, bio = ? WHERE id = ?',
-            [username, mobile, location, bio, userId]
+            [username, phone, location, bio, userId]
         );
         return res.status(200).json({ message: "Profile updated successfully" });
     } catch (err) {
