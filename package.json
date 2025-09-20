@@ -9,7 +9,7 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --env-file=.env index.js",
+    "start": "nodee --env-file=.env index.js",
     "preview": "vite preview"
   },
   "dependencies": {
